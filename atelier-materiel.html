@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Atelier">
+<meta name="theme-color" content="#16221C">
+<title>Atelier — matériel du verger</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%2316221C'/%3E%3Cg fill='none' stroke='%2377C79A' stroke-width='11' stroke-linecap='round'%3E%3Ccircle cx='90' cy='90' r='42'/%3E%3Cpath d='M90 48v-14M90 146v-14M48 90H34M146 90h-14M60 60L50 50M120 120l10 10M120 60l10-10M60 120l-10 10'/%3E%3C/g%3E%3Ccircle cx='90' cy='90' r='13' fill='%2377C79A'/%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#F1F2ED; --card:#FFFFFF; --ink:#16221C; --ink-2:#3C4A43; --muted:#6E7C74;
+  --line:#DFE3DC; --line-soft:#EBEEE8;
+  --sap:#2F6B4A; --sap-soft:#E4F0E7; --sap-deep:#1F4D34;
+  --amber:#B87A0E; --amber-soft:#FBEED4;
+  --rouge:#A2323F; --rouge-soft:#F8E3E4;
+  --bleu:#2C5F80; --bleu-soft:#E2EDF4;
+  --r:14px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-t:env(safe-area-inset-top,0px);
+  --fs: -apple-system,"SF Pro Text","Avenir Next","Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--fs); background:var(--paper); color:var(--ink);
+  font-size:16px; line-height:1.45; -webkit-text-size-adjust:100%;
+  padding-bottom:calc(78px + var(--safe-b));
+  overscroll-behavior-y:none;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3,h4{margin:0;font-weight:650;letter-spacing:-.015em}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ---------- en-tête ---------- */
+header.top{
+  position:sticky;top:0;z-index:40;
+  padding:calc(10px + var(--safe-t)) 16px 10px;
+  background:rgba(241,242,237,.92); backdrop-filter:saturate(1.4) blur(12px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;
+}
+.top h1{font-size:19px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .sub{display:block;font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:0}
+.iconbtn{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line)}
+.iconbtn:active{background:var(--line-soft)}
+.iconbtn svg{width:19px;height:19px;stroke:var(--ink-2);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dot-sync{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--amber);transform:translate(13px,-13px)}
+
+main{padding:16px 16px 24px;max-width:760px;margin:0 auto}
+.view{display:none} .view.on{display:block}
+
+/* ---------- blocs ---------- */
+.sect{margin:0 0 22px}
+.sect > h2{font-size:13px;font-weight:650;color:var(--muted);letter-spacing:.01em;margin:0 2px 8px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{display:flex;gap:12px;align-items:center;padding:12px 14px;border-top:1px solid var(--line-soft);width:100%;text-align:left}
+.row:first-child{border-top:0}
+.row:active{background:var(--line-soft)}
+.chev{margin-left:auto;color:#B7BEB7;flex:none}
+.chev svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none}
+
+/* ---------- carte machine ---------- */
+.mach{display:flex;gap:13px;align-items:center;padding:11px 12px;border-top:1px solid var(--line-soft);width:100%;text-align:left}
+.mach:first-child{border-top:0}
+.mach:active{background:var(--line-soft)}
+.thumb{width:74px;height:74px;border-radius:11px;flex:none;overflow:hidden;background:var(--line-soft);position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ph{width:100%;height:100%;display:grid;place-items:center;background:linear-gradient(180deg,#F7F8F5,#E7EBE5)}
+.thumb .ph svg{width:96%;height:96%}
+.mach .body{flex:1;min-width:0}
+.mach .name{font-weight:620;font-size:15.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mach .meta{font-size:12.5px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* jauge d'usure */
+.gauge{margin-top:8px;display:flex;align-items:center;gap:9px}
+.gauge .track{flex:1;height:7px;border-radius:4px;background:#E9EDE8;overflow:hidden;position:relative}
+.gauge .fill{height:100%;border-radius:4px;background:var(--sap);width:0}
+.gauge .tick{position:absolute;top:-2px;bottom:-2px;width:1.5px;background:#C3CBC4}
+.gauge .lbl{font-size:12px;font-weight:600;color:var(--muted);flex:none;font-variant-numeric:tabular-nums}
+.s-ok .fill{background:var(--sap)} .s-ok .lbl{color:var(--sap)}
+.s-soon .fill{background:var(--amber)} .s-soon .lbl{color:var(--amber)}
+.s-late .fill{background:var(--rouge)} .s-late .lbl{color:var(--rouge)}
+.s-idle .fill{background:#B7BEB7} .s-idle .lbl{color:var(--muted)}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:640;padding:3px 8px;border-radius:99px;background:var(--line-soft);color:var(--ink-2);white-space:nowrap}
+.pill.ok{background:var(--sap-soft);color:var(--sap-deep)}
+.pill.soon{background:var(--amber-soft);color:#7A5106}
+.pill.late{background:var(--rouge-soft);color:#7C2531}
+.pill.info{background:var(--bleu-soft);color:#1E4560}
+
+/* ---------- accueil ---------- */
+.hero{background:var(--ink);color:#EAF0EB;border-radius:var(--r);padding:16px 18px 18px;margin-bottom:20px}
+.hero .k{font-size:12.5px;color:#9FB3A6;font-weight:560}
+.hero .big{font-size:44px;font-weight:700;letter-spacing:-.035em;line-height:1.05;margin:2px 0 0;font-variant-numeric:tabular-nums}
+.hero .big span{font-size:17px;font-weight:560;letter-spacing:-.01em;color:#9FB3A6;margin-left:5px}
+.hero .split{display:flex;gap:22px;margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.14)}
+.hero .split div{flex:1}
+.hero .split .v{font-size:19px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:22px}
+.quick button{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 11px;display:flex;gap:9px;align-items:center;font-size:14px;line-height:1.2;font-weight:580;text-align:left;letter-spacing:-.012em}
+.quick button:active{background:var(--line-soft)}
+.quick svg{width:20px;height:20px;flex:none;stroke:var(--sap);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- fiche ---------- */
+.hero-photo{position:relative;border-radius:var(--r);overflow:hidden;background:var(--line-soft);aspect-ratio:16/10;margin-bottom:14px}
+.hero-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-photo .ph{width:100%;height:100%;display:grid;place-items:center;background:linear-gradient(180deg,#F7F8F5,#E5EAE3)}
+.hero-photo .ph svg{width:82%;height:82%}
+.hero-photo .cam{position:absolute;right:10px;bottom:10px;background:rgba(22,34,28,.82);color:#fff;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;display:flex;gap:7px;align-items:center}
+.hero-photo .cam svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.8}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.kpi{background:var(--card);padding:12px 10px;text-align:center}
+.kpi .v{font-size:21px;font-weight:680;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.kpi .k{font-size:11px;color:var(--muted);margin-top:1px;font-weight:540}
+
+.dl{display:grid;grid-template-columns:auto 1fr;gap:7px 16px;padding:13px 14px;font-size:14px}
+.dl dt{color:var(--muted);white-space:nowrap}
+.dl dd{margin:0;text-align:right;font-weight:560;font-variant-numeric:tabular-nums}
+
+.tl{position:relative;padding-left:0}
+.ev{display:flex;gap:11px;padding:12px 14px;border-top:1px solid var(--line-soft);align-items:flex-start;width:100%;text-align:left}
+.ev:first-child{border-top:0}
+.ev .mark{width:30px;height:30px;border-radius:9px;flex:none;display:grid;place-items:center;margin-top:1px}
+.ev .mark svg{width:16px;height:16px;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ev .t{font-size:14.5px;font-weight:580;letter-spacing:-.01em}
+.ev .d{font-size:12.5px;color:var(--muted);margin-top:1px}
+.ev .amt{margin-left:auto;font-size:13px;font-weight:600;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-use{background:var(--bleu-soft)} .m-use svg{stroke:var(--bleu)}
+.m-ent{background:var(--sap-soft)} .m-ent svg{stroke:var(--sap)}
+.m-rep{background:var(--amber-soft)} .m-rep svg{stroke:var(--amber)}
+.m-buy{background:var(--line-soft)} .m-buy svg{stroke:var(--muted)}
+
+.tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.tabs button{padding:7px 13px;border-radius:99px;font-size:13.5px;font-weight:580;background:var(--card);border:1px solid var(--line);white-space:nowrap;flex:none}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.empty{text-align:center;padding:34px 20px;color:var(--muted);font-size:14.5px}
+.empty b{display:block;color:var(--ink);font-size:15.5px;font-weight:620;margin-bottom:4px}
+
+/* ---------- barre + FAB ---------- */
+nav.tab{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  display:flex;padding:6px 4px calc(6px + var(--safe-b));
+  background:rgba(241,242,237,.94);backdrop-filter:saturate(1.4) blur(14px);
+  border-top:1px solid var(--line);
+}
+nav.tab button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--muted);font-size:10.5px;font-weight:580}
+nav.tab button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+nav.tab button.on{color:var(--sap-deep)}
+.fab{
+  position:fixed;right:16px;bottom:calc(78px + var(--safe-b));z-index:51;
+  width:56px;height:56px;border-radius:18px;background:var(--ink);color:#fff;
+  display:grid;place-items:center;box-shadow:0 6px 20px rgba(22,34,28,.28)
+}
+.fab svg{width:26px;height:26px;stroke:#fff;stroke-width:2.1;fill:none;stroke-linecap:round}
+.fab:active{transform:scale(.94)}
+
+/* ---------- feuille modale ---------- */
+.sheet-bg{position:fixed;inset:0;background:rgba(22,34,28,.42);z-index:60;opacity:0;pointer-events:none;transition:opacity .18s}
+.sheet-bg.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--paper);
+  border-radius:20px 20px 0 0;max-height:92vh;display:flex;flex-direction:column;
+  transform:translateY(102%);transition:transform .24s cubic-bezier(.32,.72,0,1);
+}
+.sheet.on{transform:none}
+@media (prefers-reduced-motion:reduce){.sheet{transition:none}.sheet-bg{transition:none}}
+.sheet .hd{display:flex;align-items:center;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.sheet .hd h3{font-size:17px;flex:1}
+.sheet .bd{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px calc(20px + var(--safe-b))}
+.sheet .grab{width:36px;height:4px;border-radius:2px;background:#C9D0C9;margin:8px auto 0}
+.linkbtn{font-size:15px;font-weight:600;color:var(--sap-deep)}
+.linkbtn.del{color:var(--rouge)}
+
+/* ---------- formulaires ---------- */
+.f{margin-bottom:13px}
+.f > label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:0 2px 5px}
+.f input,.f select,.f textarea{
+  width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--card);
+  font-size:16px;appearance:none;
+}
+.f textarea{min-height:76px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--sap);outline-offset:-1px}
+.f select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236E7C74' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.f .hint{font-size:12px;color:var(--muted);margin:5px 2px 0}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{padding:8px 13px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-size:14px;font-weight:540}
+.chips button.on{background:var(--sap-deep);border-color:var(--sap-deep);color:#fff}
+.switch{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--card);font-size:15px;font-weight:540}
+.switch input{width:auto;margin-left:auto;transform:scale(1.35);accent-color:var(--sap)}
+.btn{display:block;width:100%;padding:14px;border-radius:13px;background:var(--ink);color:#fff;font-size:16px;font-weight:640;text-align:center;margin-top:6px}
+.btn:active{opacity:.85}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:var(--rouge-soft);color:#7C2531}
+.btn.sap{background:var(--sap-deep)}
+
+/* ---------- stats ---------- */
+.chart{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.chart h3{font-size:14.5px;margin-bottom:2px}
+.chart .cap{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar{display:grid;grid-template-columns:1fr;gap:3px}
+.bar .lab{display:flex;font-size:13px}
+.bar .lab span:last-child{margin-left:auto;font-weight:620;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.bar .tr{height:9px;border-radius:5px;background:#EDF0EC;overflow:hidden}
+.bar .fi{height:100%;border-radius:5px;background:var(--sap)}
+.cols{display:flex;align-items:flex-end;gap:5px;margin-top:8px;height:136px}
+.cols>div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%;min-width:0}
+.cols .b{width:100%;flex:none;background:var(--sap);border-radius:4px 4px 2px 2px;min-height:2px}
+.cols .l{flex:none;font-size:9.5px;color:var(--muted)}
+.cols .v{flex:none;font-size:10px;font-weight:620;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(100px + var(--safe-b));transform:translate(-50%,14px);
+  background:var(--ink);color:#fff;padding:11px 17px;border-radius:12px;font-size:14.5px;font-weight:560;
+  z-index:80;opacity:0;pointer-events:none;transition:.2s;max-width:88vw;text-align:center
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media print{
+  header.top,nav.tab,.fab,.quick,.sheet,.sheet-bg,.noprint{display:none!important}
+  body{background:#fff;padding:0}
+  .panel,.chart,.kpis{break-inside:avoid;border-color:#bbb}
+  main{max-width:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div style="flex:1;min-width:0">
+    <h1 id="topTitle">Atelier</h1>
+    <span class="sub" id="topSub">Matériel du verger</span>
+  </div>
+  <button class="iconbtn" id="btnBack" style="display:none" aria-label="Retour">
+    <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <button class="iconbtn" id="btnSync" aria-label="Synchroniser">
+    <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 4v5h5"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 20v-5h-5"/></svg>
+    <span class="dot-sync" id="syncDot" style="display:none"></span>
+  </button>
+  <button class="iconbtn" id="btnSettings" aria-label="Réglages">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.2-3l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>
+  </button>
+</header>
+
+<main>
+  <section class="view on" id="v-home"></section>
+  <section class="view" id="v-parc"></section>
+  <section class="view" id="v-journal"></section>
+  <section class="view" id="v-stats"></section>
+  <section class="view" id="v-fiche"></section>
+</main>
+
+<button class="fab" id="fab" aria-label="Ajouter"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+
+<nav class="tab">
+  <button data-go="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>Accueil</button>
+  <button data-go="parc"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg>Parc</button>
+  <button data-go="journal"><svg viewBox="0 0 24 24"><path d="M5 4h11l4 4v12H5z"/><path d="M8 11h8M8 15h6"/></svg>Journal</button>
+  <button data-go="stats"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Chiffres</button>
+</nav>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <div class="hd"><h3 id="sheetTitle">—</h3><button class="linkbtn" id="sheetClose">Fermer</button></div>
+  <div class="bd" id="sheetBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="photoInput" accept="image/*" style="display:none">
+
+<script>
+/* ============================================================
+   Atelier — suivi du matériel du verger
+   Fichier autonome. Données : localStorage + Dropbox (optionnel)
+   ============================================================ */
+
+const DBX_KEY = '8en1266geqa1hsu';
+const DBX_FILE = '/Materiel_Verger.json';
+const LS = 'atelier_verger_v1';
+
+/* ---------- dessins des machines (SVG, dessinés à la main) ---------- */
+const P='#16221C', O='#E4762C', OD='#C25E1E', G='#4A554E', LG='#C9D2CB', W='#2A332E', S='#F1F2ED', GR='#DDE3DD';
+const DRAW = {
+tracteur:(M,MD)=>`<ellipse cx="100" cy="118" rx="74" ry="6" fill="${GR}"/>
+<circle cx="60" cy="86" r="27" fill="${W}"/><circle cx="60" cy="86" r="11.5" fill="${LG}"/>
+<circle cx="152" cy="96" r="17" fill="${W}"/><circle cx="152" cy="96" r="7" fill="${LG}"/>
+<rect x="58" y="68" width="102" height="18" rx="4" fill="${G}"/>
+<path d="M25 86a35 35 0 0 1 70 0h-9a26 26 0 0 0-52 0z" fill="${M}"/>
+<path d="M116 50h46a6 6 0 0 1 6 6v18h-52z" fill="${M}"/>
+<rect x="160" y="56" width="11" height="14" rx="2" fill="${LG}"/>
+<rect x="70" y="36" width="9" height="24" rx="3" fill="${G}"/>
+<rect x="70" y="58" width="28" height="9" rx="3" fill="${G}"/>
+<path d="M63 40V20h36v20" fill="none" stroke="${P}" stroke-width="5" stroke-linecap="round"/>
+<path d="M101 66l11-20M105 44h15" fill="none" stroke="${P}" stroke-width="4" stroke-linecap="round"/>
+<rect x="120" y="24" width="8" height="26" rx="2.5" fill="${LG}"/>`,
+
+'broyeur':(M,MD)=>`<ellipse cx="100" cy="116" rx="72" ry="6" fill="${GR}"/>
+<rect x="46" y="46" width="112" height="42" rx="7" fill="${M}"/>
+<path d="M46 60h112" stroke="${MD}" stroke-width="4"/>
+<rect x="150" y="40" width="20" height="54" rx="6" fill="${G}"/>
+<circle cx="160" cy="67" r="5" fill="${LG}"/>
+<path d="M46 50 22 62 46 74" fill="none" stroke="${G}" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M22 62H8" stroke="${LG}" stroke-width="9" stroke-linecap="round"/>
+<circle cx="24" cy="62" r="6" fill="${G}"/>
+<rect x="50" y="88" width="94" height="12" rx="6" fill="${W}"/>
+<circle cx="60" cy="94" r="8" fill="${LG}"/><circle cx="134" cy="94" r="8" fill="${LG}"/>`,
+
+haie:(M,MD)=>`<ellipse cx="100" cy="118" rx="70" ry="6" fill="${GR}"/>
+<rect x="14" y="52" width="26" height="46" rx="5" fill="${G}"/>
+<path d="M40 66h44" stroke="${M}" stroke-width="13" stroke-linecap="round"/>
+<path d="M84 66 122 36" stroke="${M}" stroke-width="13" stroke-linecap="round"/>
+<circle cx="84" cy="66" r="6" fill="${P}"/><circle cx="122" cy="36" r="6" fill="${P}"/>
+<path d="M60 78 84 66" stroke="${LG}" stroke-width="6" stroke-linecap="round"/>
+<rect x="126" y="20" width="16" height="76" rx="5" fill="${M}"/>
+<path d="M126 26h-9M126 38h-9M126 50h-9M126 62h-9M126 74h-9M126 86h-9" stroke="${G}" stroke-width="5" stroke-linecap="round"/>
+<rect x="142" y="20" width="9" height="76" rx="4" fill="${G}"/>`,
+
+interceps:(M,MD)=>`<ellipse cx="100" cy="118" rx="70" ry="6" fill="${GR}"/>
+<rect x="20" y="34" width="120" height="13" rx="6" fill="${G}"/>
+<rect x="112" y="40" width="14" height="34" rx="5" fill="${G}"/>
+<rect x="74" y="66" width="76" height="26" rx="9" fill="${M}"/>
+<path d="M74 80h76" stroke="${MD}" stroke-width="4"/>
+<circle cx="150" cy="86" r="13" fill="${W}"/><circle cx="150" cy="86" r="5" fill="${LG}"/>
+<path d="M74 84 52 96" stroke="${G}" stroke-width="8" stroke-linecap="round"/>
+<circle cx="46" cy="98" r="10" fill="${W}"/><circle cx="46" cy="98" r="4" fill="${LG}"/>
+<path d="M92 92v10M112 92v10M132 92v10" stroke="${P}" stroke-width="5" stroke-linecap="round"/>`,
+
+branches:(M,MD)=>`<ellipse cx="100" cy="118" rx="74" ry="6" fill="${GR}"/>
+<path d="M96 22h62l-14 34H96z" fill="${M}"/>
+<path d="M110 22 96 56" stroke="${MD}" stroke-width="3"/>
+<rect x="40" y="54" width="112" height="42" rx="8" fill="${G}"/>
+<rect x="52" y="62" width="30" height="20" rx="4" fill="${LG}"/>
+<path d="M40 62 16 44" stroke="${G}" stroke-width="9" stroke-linecap="round"/>
+<path d="M40 78c-16 0-22-14-30-22" stroke="${W}" stroke-width="8" fill="none" stroke-linecap="round"/>
+<circle cx="66" cy="98" r="15" fill="${W}"/><circle cx="66" cy="98" r="6" fill="${LG}"/>
+<circle cx="132" cy="98" r="15" fill="${W}"/><circle cx="132" cy="98" r="6" fill="${LG}"/>`,
+
+tronconneuse:(M,MD)=>`<ellipse cx="100" cy="116" rx="70" ry="6" fill="${GR}"/>
+<rect x="20" y="48" width="66" height="42" rx="9" fill="${M}"/>
+<path d="M20 62h66" stroke="${MD}" stroke-width="4"/>
+<path d="M26 48V34a8 8 0 0 1 8-8h44" stroke="${P}" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M78 26h10a7 7 0 0 1 0 14" stroke="${P}" stroke-width="7" fill="none" stroke-linecap="round"/>
+<rect x="14" y="54" width="10" height="20" rx="3" fill="${G}"/>
+<path d="M86 60h84a8 8 0 0 1 0 16H86z" fill="${LG}"/>
+<path d="M86 60h84a8 8 0 0 1 0 16H86z" fill="none" stroke="${G}" stroke-width="3"/>
+<path d="M96 56v6M110 56v6M124 56v6M138 56v6M152 56v6M164 58v5" stroke="${G}" stroke-width="4" stroke-linecap="round"/>
+<circle cx="88" cy="68" r="9" fill="${G}"/>`,
+
+debroussailleuse:(M,MD)=>`<ellipse cx="100" cy="118" rx="70" ry="6" fill="${GR}"/>
+<path d="M40 34 158 96" stroke="${LG}" stroke-width="11" stroke-linecap="round"/>
+<rect x="16" y="18" width="36" height="30" rx="8" fill="${M}" transform="rotate(28 34 33)"/>
+<path d="M84 58 66 40M96 64l16-20" stroke="${P}" stroke-width="7" stroke-linecap="round"/>
+<circle cx="158" cy="96" r="22" fill="${G}"/><circle cx="158" cy="96" r="7" fill="${LG}"/>
+<path d="M158 74v-7M180 96h7M158 118v7M136 96h-7M143 81l-5-5M173 111l5 5M173 81l5-5M143 111l-5 5" stroke="${G}" stroke-width="5" stroke-linecap="round"/>`,
+
+tariere:(M,MD)=>`<ellipse cx="100" cy="118" rx="60" ry="6" fill="${GR}"/>
+<rect x="66" y="16" width="68" height="34" rx="9" fill="${M}"/>
+<path d="M66 30h68" stroke="${MD}" stroke-width="4"/>
+<path d="M66 26H30M134 26h36" stroke="${P}" stroke-width="7" stroke-linecap="round"/>
+<rect x="90" y="50" width="20" height="12" rx="3" fill="${G}"/>
+<path d="M100 62v42" stroke="${G}" stroke-width="8" stroke-linecap="round"/>
+<path d="M100 66c18 0 18 12 0 12s-18 12 0 12 18 12 0 12" fill="none" stroke="${LG}" stroke-width="8" stroke-linecap="round"/>
+<path d="M100 104l-7 12h14z" fill="${G}"/>`,
+
+nettoyeur:(M,MD)=>`<ellipse cx="100" cy="116" rx="66" ry="6" fill="${GR}"/>
+<rect x="42" y="46" width="76" height="50" rx="10" fill="${M}"/>
+<rect x="42" y="46" width="76" height="14" rx="7" fill="${G}"/>
+<path d="M56 46V26h30" fill="none" stroke="${G}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="80" cy="76" r="13" fill="${S}"/><circle cx="80" cy="76" r="5" fill="${G}"/>
+<circle cx="54" cy="98" r="10" fill="${W}"/><circle cx="112" cy="98" r="10" fill="${W}"/>
+<path d="M118 66c22 0 14 22 30 22" fill="none" stroke="${W}" stroke-width="6" stroke-linecap="round"/>
+<path d="M144 92l12-10 6 8z" fill="${G}"/>
+<path d="M158 82h30" stroke="${LG}" stroke-width="8" stroke-linecap="round"/>
+<path d="M190 74l4-4M190 82h6M190 90l4 4" stroke="${LG}" stroke-width="4" stroke-linecap="round"/>`,
+
+chenille:(M,MD)=>`<ellipse cx="100" cy="120" rx="76" ry="5" fill="${GR}"/>
+<path d="M50 82h100a18 18 0 0 1 0 36H50a18 18 0 0 1 0-36z" fill="${W}"/>
+<circle cx="56" cy="100" r="9" fill="${LG}"/><circle cx="144" cy="100" r="9" fill="${LG}"/>
+<path d="M74 82v-6M96 82v-6M118 82v-6" stroke="${W}" stroke-width="4"/>
+<path d="M46 44h84l14 32H60z" fill="${M}"/>
+<path d="M46 44 60 76" stroke="${MD}" stroke-width="3"/>
+<rect x="140" y="52" width="34" height="26" rx="7" fill="${G}"/>
+<path d="M174 60h12M174 70h12" stroke="${P}" stroke-width="6" stroke-linecap="round"/>`,
+
+remorque:(M,MD)=>`<ellipse cx="100" cy="116" rx="72" ry="6" fill="${GR}"/>
+<path d="M42 46h116v40H42z" fill="${M}"/>
+<path d="M42 60h116" stroke="${MD}" stroke-width="4"/>
+<rect x="38" y="86" width="124" height="10" rx="5" fill="${G}"/>
+<path d="M38 92 12 78" stroke="${G}" stroke-width="8" stroke-linecap="round"/>
+<circle cx="70" cy="100" r="13" fill="${W}"/><circle cx="70" cy="100" r="5" fill="${LG}"/>
+<circle cx="132" cy="100" r="13" fill="${W}"/><circle cx="132" cy="100" r="5" fill="${LG}"/>`,
+
+autre:(M,MD)=>`<ellipse cx="100" cy="118" rx="62" ry="6" fill="${GR}"/>
+<path d="M100 30a34 34 0 0 1 34 34 34 34 0 0 1-34 34 34 34 0 0 1-34-34 34 34 0 0 1 34-34z" fill="${M}"/>
+<circle cx="100" cy="64" r="14" fill="${S}"/>
+<path d="M100 18v14M100 96v14M146 64h-14M68 64H54M132 32l-10 10M78 86l-10 10M132 96l-10-10M78 42 68 32" stroke="${G}" stroke-width="8" stroke-linecap="round"/>`
+};
+
+
+/* teintes réelles : STIHL orange, Solis / ISEKI / interceps RAL 5015, Breviglieri / Lindana RAL 3000 */
+const RAL5015=['#2271B3','#17558A'], RAL3000=['#AF2B1E','#871F16'], ORANGE=[O,OD];
+const TINT={ tracteur:RAL5015, chenille:RAL5015, interceps:RAL5015,
+  broyeur:RAL3000, haie:RAL3000, branches:RAL3000,
+  tronconneuse:ORANGE, debroussailleuse:ORANGE, tariere:ORANGE, nettoyeur:ORANGE };
+const CATS = [
+  ['Tracteur','tracteur'],['Broyeur d\u2019herbe','broyeur'],['Taille-haie','haie'],
+  ['Broyeur interceps','interceps'],['Broyeur de branches','branches'],['Tron\u00e7onneuse','tronconneuse'],
+  ['D\u00e9broussailleuse','debroussailleuse'],['Tari\u00e8re','tariere'],['Nettoyeur haute pression','nettoyeur'],
+  ['Brouette sur chenille','chenille'],['Remorque','remorque'],['Autre','autre']
+];
+function drawFor(cat){
+  const k=(CATS.find(x=>x[0]===cat)||['','autre'])[1];
+  const t=TINT[k]||ORANGE;
+  return `<svg viewBox="0 0 200 130" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${(DRAW[k]||DRAW.autre)(t[0],t[1])}</svg>`;
+}
+
+/* ---------- données de départ (reprises du fichier Materiel.xlsx) ---------- */
+const SEED_MACHINES = [
+  ['Tracteur Solis 50','Tracteur','2021-02-06',20500,75,18,40,137,'2025-01-12',true],
+  ['Broyeur d\u2019herbe Breviglieri','Broyeur d\u2019herbe','2022-08-11',7483,100,60,20,28,'2022-08-11',false],
+  ['Taille-haie Breviglieri','Taille-haie','2023-12-16',12055,100,60,10,15,'2023-12-16',false],
+  ['Broyeur interceps','Broyeur interceps','2027-01-01',null,100,60,10,0,null,false],
+  ['Broyeur de branches Lindana','Broyeur de branches','2024-04-03',10000,50,60,10,12,'2024-04-03',false],
+  ['STIHL MS-250','Tron\u00e7onneuse',null,1200,75,18,30,30,'2026-02-12',false],
+  ['STIHL FS-240','D\u00e9broussailleuse',null,800,75,18,30,25,'2024-02-01',false],
+  ['STIHL BT 131','Tari\u00e8re',null,600,50,24,2,3,'2024-02-10',false],
+  ['STIHL RE272 PLUS','Nettoyeur haute pression','2021-10-15',1305,100,24,8,12,'2021-10-15',false],
+  ['ISEKI XG550DI-H','Brouette sur chenille','2024-10-15',5200,150,36,20,12,'2024-10-15',true]
+];
+const TRAVAUX = ['Tonte / broyage d\u2019herbe','Taille de haie','Broyage de branches','Abattage / tron\u00e7onnage',
+  'D\u00e9broussaillage','Plantation / tari\u00e8re','Transport / manutention','Travail du sol','Nettoyage','Divers'];
+const LIEUX = ['Verger pommiers-poiriers','Verger des moutons','Noiseraie','R\u00e9serve Paliseul','Abords maison'];
+const OPS = ['Vidange moteur','Filtre \u00e0 huile','Filtre \u00e0 air','Filtre \u00e0 carburant','Bougie','Graissage',
+  'Aff\u00fbtage','Cha\u00eene (tension / graissage)','Courroie','Boulonnerie','Pression des pneus','Niveau hydraulique',
+  'Batterie','Nettoyage complet','R\u00e9vision atelier','Hivernage'];
+
+/* ---------- stockage ---------- */
+let memStore = {};
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return memStore[k]??null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){ memStore[k]=v; return false; } return true; }
+};
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+function seed(){
+  const machines = SEED_MACHINES.map(s => ({
+    id:uid(), nom:s[0], categorie:s[1], marque:'', modele:'', serie:'',
+    dateAcq:s[2], prix:s[3], intH:s[4], intM:s[5], heuresAn:s[6],
+    heuresReportees:s[7], dernierEntretienDate:s[8], dernierEntretienCompteur:null,
+    compteurActif:s[9], compteurInitial:null, photo:null, statut:'service',
+    remarques:'', refs:[]
+  }));
+  return { machines, events:[], travaux:[...TRAVAUX], lieux:[...LIEUX], ops:[...OPS],
+           updatedAt:new Date().toISOString(), version:1 };
+}
+
+let D = null;
+function load(){
+  const raw = store.get(LS);
+  if(raw){ try{ D = JSON.parse(raw); }catch(e){ D = seed(); } }
+  else D = seed();
+  D.travaux ||= [...TRAVAUX]; D.lieux ||= [...LIEUX]; D.ops ||= [...OPS]; D.events ||= [];
+}
+function save(sync=true){
+  D.updatedAt = new Date().toISOString();
+  const ok = store.set(LS, JSON.stringify(D));
+  if(!ok) toast('M\u00e9moire du t\u00e9l\u00e9phone pleine \u2014 all\u00e9gez les photos');
+  if(sync) queueSync();
+}
+
+/* ---------- utilitaires ---------- */
+const pad = n => String(n).padStart(2,'0');
+const today = () => new Date().toISOString().slice(0,10);
+function fdate(iso){ if(!iso) return '\u2014'; const [y,m,d]=iso.slice(0,10).split('-'); return `${d}/${m}/${y}`; }
+function fdateShort(iso){ if(!iso) return '\u2014'; const [y,m,d]=iso.slice(0,10).split('-'); return `${d}/${m}/${y.slice(2)}`; }
+function nh(v){ return (Math.round(v*10)/10).toString().replace('.',','); }
+function eur(v){ return v==null||v===''?'\u2014':new Intl.NumberFormat('fr-BE',{maximumFractionDigits:0}).format(v)+'\u00a0\u20ac'; }
+function monthsBetween(a,b){ // a,b ISO
+  const d1=new Date(a), d2=new Date(b);
+  return (d2.getFullYear()-d1.getFullYear())*12 + (d2.getMonth()-d1.getMonth()) + (d2.getDate()-d1.getDate())/30.44;
+}
+function addMonths(iso,m){ const d=new Date(iso); d.setMonth(d.getMonth()+Math.round(m)); return d.toISOString().slice(0,10); }
+function addDays(iso,n){ const d=new Date(iso); d.setDate(d.getDate()+Math.round(n)); return d.toISOString().slice(0,10); }
+function esc(s){ return (s??'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const mach = id => D.machines.find(m=>m.id===id);
+
+/* ---------- calculs d'entretien ---------- */
+function evOf(id){ return D.events.filter(e=>e.machineId===id).sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0); }
+
+function durations(m){
+  // renvoie une Map eventId -> heures d'utilisation
+  const out = new Map();
+  let last = m.compteurInitial;
+  for(const e of evOf(m.id)){
+    if(e.type==='utilisation'){
+      if(e.duree!=null && e.duree!=='') out.set(e.id, +e.duree);
+      else if(e.compteur!=null && last!=null) out.set(e.id, Math.max(0, +e.compteur-last));
+      else out.set(e.id, 0);
+    }
+    if(e.compteur!=null) last = +e.compteur;
+  }
+  return out;
+}
+
+function computeMachine(m){
+  const evs = evOf(m.id);
+  const dur = durations(m);
+  const withC = evs.filter(e=>e.compteur!=null);
+  const cur = withC.length ? +withC[withC.length-1].compteur : m.compteurInitial;
+
+  const ents = evs.filter(e=>e.type==='entretien');
+  const le = ents.length ? ents[ents.length-1] : null;
+  const lastDate = le ? le.date : m.dernierEntretienDate;
+  const lastCpt  = le ? (le.compteur!=null?+le.compteur:null) : (m.dernierEntretienCompteur!=null?+m.dernierEntretienCompteur:null);
+  const carry = le ? 0 : (+m.heuresReportees||0);
+
+  let heuresDepuis;
+  if(lastCpt!=null && cur!=null) heuresDepuis = Math.max(0, cur-lastCpt);
+  else heuresDepuis = carry + evs.filter(e=>e.type==='utilisation' && (!lastDate || e.date>=lastDate))
+                                 .reduce((s,e)=>s+(dur.get(e.id)||0),0);
+
+  const moisDepuis = lastDate ? Math.max(0, monthsBetween(lastDate, today())) : null;
+  const pctH = m.intH ? heuresDepuis/m.intH : 0;
+  const pctM = (m.intM && moisDepuis!=null) ? moisDepuis/m.intM : 0;
+  const pct  = Math.max(pctH, pctM);
+
+  // rythme d'utilisation : mesuré sur 365 j si possible, sinon indicatif
+  const y0 = addDays(today(),-365);
+  const mesure = evs.filter(e=>e.type==='utilisation' && e.date>=y0).reduce((s,e)=>s+(dur.get(e.id)||0),0);
+  const rythme = mesure>1 ? mesure : (+m.heuresAn||0);
+
+  let echeance = null, source='';
+  if(m.intH){
+    const reste = m.intH - heuresDepuis;
+    if(rythme>0){ echeance = addDays(today(), Math.max(0, reste/rythme*365)); source='heures'; }
+  }
+  if(m.intM && lastDate){
+    const lim = addMonths(lastDate, m.intM);
+    if(!echeance || lim<echeance){ echeance = lim; source='calendrier'; }
+  }
+
+  const coutEnt = evs.filter(e=>e.type==='entretien').reduce((s,e)=>s+(+e.cout||0),0);
+  const coutRep = evs.filter(e=>e.type==='reparation').reduce((s,e)=>s+(+e.cout||0),0);
+  const heuresTotal = [...dur.values()].reduce((a,b)=>a+b,0);
+
+  let statut;
+  if(m.statut==='archive') statut='idle';
+  else if(m.dateAcq && m.dateAcq>today()) statut='idle';
+  else if(m.statut==='hs') statut='late';
+  else if(pct>=1) statut='late';
+  else if(pct>=0.8) statut='soon';
+  else statut='ok';
+
+  return {evs,dur,cur,lastDate,lastCpt,heuresDepuis,moisDepuis,pctH,pctM,pct,statut,
+          echeance,source,rythme,coutEnt,coutRep,heuresTotal,
+          coutTotal:(+m.prix||0)+coutEnt+coutRep,
+          futur: !!(m.dateAcq && m.dateAcq>today())};
+}
+
+function statutLabel(m,c){
+  if(m.statut==='archive') return ['pill','Archiv\u00e9'];
+  if(m.statut==='hs') return ['pill late','Hors service'];
+  if(m.statut==='reparation') return ['pill soon','En r\u00e9paration'];
+  if(c.futur) return ['pill info','\u00c0 venir'];
+  if(c.statut==='late') return ['pill late','Entretien d\u00fb'];
+  if(c.statut==='soon') return ['pill soon','Bient\u00f4t'];
+  return ['pill ok','\u00c0 jour'];
+}
+
+function heuresAnnee(y, id){
+  let t=0;
+  for(const m of D.machines){
+    if(id && m.id!==id) continue;
+    const dur = durations(m);
+    for(const e of evOf(m.id)) if(e.type==='utilisation' && e.date.slice(0,4)===String(y)) t += dur.get(e.id)||0;
+  }
+  return t;
+}
+
+/* ---------- navigation ---------- */
+let view='home', ficheId=null;
+function go(v, id){
+  view=v; if(id) ficheId=id;
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('on'));
+  document.getElementById('v-'+(v==='fiche'?'fiche':v)).classList.add('on');
+  document.querySelectorAll('nav.tab button').forEach(b=>b.classList.toggle('on', b.dataset.go===v));
+  document.getElementById('btnBack').style.display = v==='fiche' ? 'grid':'none';
+  window.scrollTo(0,0);
+  render();
+}
+let DUR=new Map();
+function refreshDur(){ DUR=new Map(); for(const m of D.machines) durations(m).forEach((v,k)=>DUR.set(k,v)); }
+function render(){
+  refreshDur();
+  if(view==='home') renderHome();
+  else if(view==='parc') renderParc();
+  else if(view==='journal') renderJournal();
+  else if(view==='stats') renderStats();
+  else if(view==='fiche') renderFiche();
+}
+
+/* ---------- accueil ---------- */
+function renderHome(){
+  refreshDur();
+  document.getElementById('topTitle').textContent='Atelier';
+  document.getElementById('topSub').textContent='Mat\u00e9riel du verger';
+  const y = new Date().getFullYear();
+  const rows = D.machines.filter(m=>m.statut!=='archive').map(m=>({m,c:computeMachine(m)}));
+  const late = rows.filter(r=>!r.c.futur && r.c.statut==='late').sort((a,b)=>b.c.pct-a.c.pct);
+  const soon = rows.filter(r=>!r.c.futur && r.c.statut==='soon').sort((a,b)=>b.c.pct-a.c.pct);
+  const hAn = heuresAnnee(y);
+  const coutAn = D.events.filter(e=>e.date.slice(0,4)===String(y)).reduce((s,e)=>s+(+e.cout||0),0);
+  const nbEvAn = D.events.filter(e=>e.date.slice(0,4)===String(y)).length;
+
+  let h = `<div class="hero">
+    <div class="k">Entretiens en retard</div>
+    <div class="big num">${late.length}<span>sur ${rows.length} machines</span></div>
+    <div class="split">
+      <div><div class="k">Heures ${y}</div><div class="v num">${nh(hAn)} h</div></div>
+      <div><div class="k">D\u00e9penses ${y}</div><div class="v num">${eur(coutAn)}</div></div>
+      <div><div class="k">Saisies ${y}</div><div class="v num">${nbEvAn}</div></div>
+    </div>
+  </div>
+
+  <div class="quick">
+    <button data-new="utilisation"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Heures de travail</button>
+    <button data-new="entretien"><svg viewBox="0 0 24 24"><path d="M14.5 5.5a4 4 0 0 0 5 5L21 9v6l-6 6H9l-6-6 6-6h6z"/></svg>Entretien</button>
+    <button data-new="reparation"><svg viewBox="0 0 24 24"><path d="M4 20l7-7"/><path d="M14 4a4.5 4.5 0 0 0 6 6l-9 9-3-3z"/></svg>R\u00e9paration</button>
+    <button data-new="machine"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Nouvelle machine</button>
+  </div>`;
+
+  if(late.length){
+    h += `<div class="sect"><h2>\u00c0 faire maintenant</h2><div class="panel">${late.map(r=>machRow(r.m,r.c)).join('')}</div></div>`;
+  }
+  if(soon.length){
+    h += `<div class="sect"><h2>\u00c0 pr\u00e9voir</h2><div class="panel">${soon.map(r=>machRow(r.m,r.c)).join('')}</div></div>`;
+  }
+  if(!late.length && !soon.length){
+    h += `<div class="sect"><div class="panel"><div class="empty"><b>Tout est \u00e0 jour</b>Aucun entretien n\u2019arrive \u00e0 \u00e9ch\u00e9ance.</div></div></div>`;
+  }
+
+  const recents = [...D.events].sort((a,b)=>a.date<b.date?1:-1).slice(0,5);
+  if(recents.length){
+    h += `<div class="sect"><h2>Derni\u00e8res saisies</h2><div class="panel">${recents.map(evRow).join('')}</div></div>`;
+  }
+  document.getElementById('v-home').innerHTML = h;
+}
+
+function thumb(m){
+  return m.photo ? `<div class="thumb"><img src="${m.photo}" alt=""></div>`
+    : `<div class="thumb"><div class="ph">${drawFor(m.categorie)}</div></div>`;
+}
+
+function machRow(m,c){
+  const [cls,lbl] = statutLabel(m,c);
+  const pctReel = Math.round((c.pct||0)*100);
+  const pct = Math.min(100, pctReel);
+  const scls = c.futur||m.statut==='archive' ? 's-idle' : 's-'+c.statut;
+  let sub;
+  if(c.futur) sub = 'Acquisition pr\u00e9vue le '+fdate(m.dateAcq);
+  else if(c.echeance) sub = (c.statut==='late'?'En retard depuis le ':'\u00c9ch\u00e9ance ~ ')+fdate(c.echeance);
+  else sub = m.categorie;
+  return `<button class="mach" data-fiche="${m.id}">
+    ${thumb(m)}
+    <div class="body">
+      <div class="name">${esc(m.nom)}</div>
+      <div class="meta">${esc(sub)}</div>
+      <div class="gauge ${scls}">
+        <div class="track"><div class="fill" style="width:${pct}%"></div><div class="tick" style="left:80%"></div></div>
+        <div class="lbl">${pctReel}%</div>
+      </div>
+    </div>
+  </button>`;
+}
+
+/* ---------- parc ---------- */
+let parcFilter='tous';
+function renderParc(){
+  refreshDur();
+  document.getElementById('topTitle').textContent='Parc mat\u00e9riel';
+  document.getElementById('topSub').textContent=D.machines.filter(m=>m.statut!=='archive').length+' machines';
+  const f = parcFilter;
+  let list = D.machines.map(m=>({m,c:computeMachine(m)}));
+  if(f==='tous') list = list.filter(r=>r.m.statut!=='archive');
+  if(f==='du') list = list.filter(r=>!r.c.futur && r.m.statut!=='archive' && (r.c.statut==='late'||r.c.statut==='soon'));
+  if(f==='archive') list = list.filter(r=>r.m.statut==='archive');
+  list.sort((a,b)=> b.c.pct-a.c.pct);
+
+  const chips = [['tous','Toutes'],['du','\u00c0 entretenir'],['archive','Archiv\u00e9es']];
+  let h = `<div class="tabs">${chips.map(c=>`<button data-parc="${c[0]}" class="${f===c[0]?'on':''}">${c[1]}</button>`).join('')}</div>`;
+  h += list.length ? `<div class="panel">${list.map(r=>machRow(r.m,r.c)).join('')}</div>`
+    : `<div class="panel"><div class="empty"><b>Rien ici</b>Changez de filtre ou ajoutez une machine.</div></div>`;
+  h += `<button class="btn ghost noprint" style="margin-top:14px" data-new="machine">Ajouter une machine</button>`;
+  document.getElementById('v-parc').innerHTML = h;
+}
+
+/* ---------- journal ---------- */
+let jFilter='tous', jMachine='', jQuery='';
+function evRow(e){
+  const m = mach(e.machineId);
+  const icon = {utilisation:['m-use','<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'],
+                entretien:['m-ent','<path d="M14.5 5.5a4 4 0 0 0 5 5L21 9v6l-6 6H9l-6-6 6-6h6z"/>'],
+                reparation:['m-rep','<path d="M4 20l7-7"/><path d="M14 4a4.5 4.5 0 0 0 6 6l-9 9-3-3z"/>']}[e.type];
+  let t = e.titre || {utilisation:'Utilisation',entretien:'Entretien',reparation:'R\u00e9paration'}[e.type];
+  const bits = [fdate(e.date), m?m.nom:'?'];
+  const d = DUR.get(e.id);
+  if(e.type==='utilisation' && d) bits.push(nh(d)+' h');
+  if(e.compteur!=null) bits.push(nh(e.compteur)+' h au compteur');
+  const sub = e.type==='utilisation'
+      ? bits.concat(e.lieu?[e.lieu]:[]).join(' \u00b7 ')
+      : bits.join(' \u00b7 ');
+  return `<button class="ev" data-ev="${e.id}">
+    <div class="mark ${icon[0]}"><svg viewBox="0 0 24 24">${icon[1]}</svg></div>
+    <div style="min-width:0;flex:1"><div class="t">${esc(t)}</div><div class="d">${esc(sub)}</div></div>
+    ${e.cout?`<div class="amt">${eur(e.cout)}</div>`:''}
+  </button>`;
+}
+function renderJournal(){
+  refreshDur();
+  document.getElementById('topTitle').textContent='Journal';
+  document.getElementById('topSub').textContent=D.events.length+' saisies';
+  let list = [...D.events];
+  if(jFilter!=='tous') list = list.filter(e=>e.type===jFilter);
+  if(jMachine) list = list.filter(e=>e.machineId===jMachine);
+  if(jQuery){
+    const q=jQuery.toLowerCase();
+    list = list.filter(e=>{const m=mach(e.machineId);
+      return (e.titre||'').toLowerCase().includes(q) || (e.notes||'').toLowerCase().includes(q)
+        || (m&&m.nom.toLowerCase().includes(q)) || (e.travaux||[]).join(' ').toLowerCase().includes(q)
+        || (e.lieu||'').toLowerCase().includes(q);});
+  }
+  list.sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
+
+  const chips=[['tous','Tout'],['utilisation','Heures'],['entretien','Entretiens'],['reparation','R\u00e9parations']];
+  let h = `<div class="tabs">${chips.map(c=>`<button data-jf="${c[0]}" class="${jFilter===c[0]?'on':''}">${c[1]}</button>`).join('')}</div>
+  <div class="f"><input id="jq" type="search" placeholder="Rechercher" value="${esc(jQuery)}"></div>
+  <div class="f"><select id="jm"><option value="">Toutes les machines</option>${D.machines.map(m=>`<option value="${m.id}" ${jMachine===m.id?'selected':''}>${esc(m.nom)}</option>`).join('')}</select></div>`;
+
+  if(!list.length) h += `<div class="panel"><div class="empty"><b>Aucune saisie</b>Touchez + pour encoder des heures, un entretien ou une r\u00e9paration.</div></div>`;
+  else{
+    const groups={};
+    for(const e of list){ const k=e.date.slice(0,7); (groups[k]||=[]).push(e); }
+    for(const k of Object.keys(groups).sort().reverse()){
+      const [y,mm]=k.split('-');
+      const nom=['janvier','f\u00e9vrier','mars','avril','mai','juin','juillet','ao\u00fbt','septembre','octobre','novembre','d\u00e9cembre'][+mm-1];
+      h += `<div class="sect"><h2>${nom} ${y}</h2><div class="panel">${groups[k].map(evRow).join('')}</div></div>`;
+    }
+  }
+  document.getElementById('v-journal').innerHTML=h;
+  const jq=document.getElementById('jq');
+  if(jq) jq.oninput = ev=>{ jQuery=ev.target.value; const p=jq.selectionStart; renderJournal();
+    const n=document.getElementById('jq'); n.focus(); n.setSelectionRange(p,p); };
+  const jm=document.getElementById('jm'); if(jm) jm.onchange=ev=>{ jMachine=ev.target.value; renderJournal(); };
+}
+
+/* ---------- chiffres ---------- */
+let statYear = new Date().getFullYear();
+function renderStats(){
+  refreshDur();
+  document.getElementById('topTitle').textContent='Chiffres';
+  document.getElementById('topSub').textContent='Utilisation et co\u00fbts';
+  const years=new Set([new Date().getFullYear()]);
+  D.events.forEach(e=>years.add(+e.date.slice(0,4)));
+  const ys=[...years].sort((a,b)=>b-a);
+  const y=statYear;
+
+  const perMach = D.machines.map(m=>({m, h:heuresAnnee(y,m.id)})).filter(x=>x.h>0).sort((a,b)=>b.h-a.h);
+  const totH = perMach.reduce((s,x)=>s+x.h,0);
+
+  const months=Array(12).fill(0);
+  for(const m of D.machines){ const dur=durations(m);
+    for(const e of evOf(m.id)) if(e.type==='utilisation'&&e.date.slice(0,4)===String(y)) months[+e.date.slice(5,7)-1]+=dur.get(e.id)||0; }
+  const maxM=Math.max(...months,1);
+
+  const trav={};
+  for(const m of D.machines){ const dur=durations(m);
+    for(const e of evOf(m.id)) if(e.type==='utilisation'&&e.date.slice(0,4)===String(y)){
+      const hh=dur.get(e.id)||0; const list=(e.travaux&&e.travaux.length)?e.travaux:['Non pr\u00e9cis\u00e9'];
+      list.forEach(t=>trav[t]=(trav[t]||0)+hh/list.length); } }
+  const travList=Object.entries(trav).filter(t=>t[1]>0.01).sort((a,b)=>b[1]-a[1]);
+  const maxT=Math.max(...travList.map(t=>t[1]),1);
+
+  const evY=D.events.filter(e=>e.date.slice(0,4)===String(y));
+  const cEnt=evY.filter(e=>e.type==='entretien').reduce((s,e)=>s+(+e.cout||0),0);
+  const cRep=evY.filter(e=>e.type==='reparation').reduce((s,e)=>s+(+e.cout||0),0);
+  const carb=evY.reduce((s,e)=>s+(+e.litres||0),0);
+
+  let h=`<div class="tabs">${ys.map(v=>`<button data-year="${v}" class="${v===y?'on':''}">${v}</button>`).join('')}</div>
+  <div class="kpis">
+    <div class="kpi"><div class="v num">${nh(totH)}</div><div class="k">heures</div></div>
+    <div class="kpi"><div class="v num">${eur(cEnt+cRep)}</div><div class="k">d\u00e9penses</div></div>
+    <div class="kpi"><div class="v num">${carb?nh(carb)+' L':'\u2014'}</div><div class="k">carburant</div></div>
+  </div>`;
+
+  h+=`<div class="sect"><div class="chart"><h3>Heures par mois</h3><div class="cap">Toutes machines confondues</div>
+    <div class="cols">${months.map((v,i)=>`<div><div class="v">${v?nh(v):''}</div><div class="b" style="height:${Math.max(2,Math.round(v/maxM*104))}px"></div><div class="l">${'JFMAMJJASOND'[i]}</div></div>`).join('')}</div></div></div>`;
+
+  if(perMach.length) h+=`<div class="sect"><div class="chart"><h3>Heures par machine</h3><div class="cap">Ann\u00e9e ${y}</div><div class="bars">
+    ${perMach.map(x=>`<div class="bar"><div class="lab"><span>${esc(x.m.nom)}</span><span>${nh(x.h)} h</span></div>
+    <div class="tr"><div class="fi" style="width:${Math.round(x.h/perMach[0].h*100)}%"></div></div></div>`).join('')}</div></div></div>`;
+
+  if(travList.length) h+=`<div class="sect"><div class="chart"><h3>R\u00e9partition par travaux</h3><div class="cap">Heures affect\u00e9es</div><div class="bars">
+    ${travList.map(t=>`<div class="bar"><div class="lab"><span>${esc(t[0])}</span><span>${nh(t[1])} h</span></div>
+    <div class="tr"><div class="fi" style="width:${Math.round(t[1]/maxT*100)}%"></div></div></div>`).join('')}</div></div></div>`;
+
+  const coutMach=D.machines.map(m=>{const c=computeMachine(m);
+    return {m,c, cy:evOf(m.id).filter(e=>e.date.slice(0,4)===String(y)).reduce((s,e)=>s+(+e.cout||0),0)}})
+    .filter(x=>x.cy>0).sort((a,b)=>b.cy-a.cy);
+  if(coutMach.length) h+=`<div class="sect"><div class="chart"><h3>D\u00e9penses par machine</h3>
+    <div class="cap">Entretiens ${eur(cEnt)} \u00b7 R\u00e9parations ${eur(cRep)}</div><div class="bars">
+    ${coutMach.map(x=>`<div class="bar"><div class="lab"><span>${esc(x.m.nom)}</span><span>${eur(x.cy)}</span></div>
+    <div class="tr"><div class="fi" style="width:${Math.round(x.cy/coutMach[0].cy*100)}%"></div></div></div>`).join('')}</div></div></div>`;
+
+  const patrimoine=D.machines.filter(m=>m.statut!=='archive').reduce((s,m)=>s+(+m.prix||0),0);
+  h+=`<div class="sect"><h2>Parc</h2><div class="panel"><dl class="dl">
+    <dt>Valeur d\u2019acquisition</dt><dd>${eur(patrimoine)}</dd>
+    <dt>Machines actives</dt><dd>${D.machines.filter(m=>m.statut!=='archive').length}</dd>
+    <dt>Heures cumul\u00e9es encod\u00e9es</dt><dd>${nh(D.machines.reduce((s,m)=>s+computeMachine(m).heuresTotal,0))} h</dd>
+  </dl></div></div>`;
+  document.getElementById('v-stats').innerHTML=h;
+}
+
+/* ---------- fiche machine ---------- */
+function renderFiche(){
+  refreshDur();
+  const m=mach(ficheId); if(!m){ go('parc'); return; }
+  const c=computeMachine(m);
+  document.getElementById('topTitle').textContent=m.nom;
+  document.getElementById('topSub').textContent=m.categorie;
+  const [pcls,plbl]=statutLabel(m,c);
+  const pctReel=Math.round((c.pct||0)*100);
+  const pct=Math.min(100,pctReel);
+
+  let h=`<div class="hero-photo">${m.photo?`<img src="${m.photo}" alt="">`:`<div class="ph">${drawFor(m.categorie)}</div>`}
+    <button class="cam noprint" data-photo="${m.id}"><svg viewBox="0 0 24 24"><path d="M3 8h4l1.5-2h7L17 8h4v11H3z" fill="none"/><circle cx="12" cy="13" r="3.4"/></svg>${m.photo?'Changer':'Ajouter une photo'}</button>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+    <span class="${pcls}">${plbl}</span>
+    ${c.cur!=null?`<span class="pill">Compteur ${nh(c.cur)} h</span>`:''}
+    ${m.marque||m.modele?`<span class="pill">${esc([m.marque,m.modele].filter(Boolean).join(' '))}</span>`:''}
+  </div>
+
+  <div class="sect"><div class="panel" style="padding:14px">
+    <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:7px">
+      <span style="color:var(--muted)">Usure depuis le dernier entretien</span><strong class="num">${pctReel}%</strong></div>
+    <div class="gauge s-${c.statut}"><div class="track"><div class="fill" style="width:${pct}%"></div><div class="tick" style="left:80%"></div></div></div>
+    <dl class="dl" style="padding:12px 0 0">
+      <dt>Heures depuis l\u2019entretien</dt><dd>${nh(c.heuresDepuis)} h ${m.intH?`/ ${m.intH} h`:''}</dd>
+      <dt>Temps depuis l\u2019entretien</dt><dd>${c.moisDepuis!=null?nh(c.moisDepuis)+' mois':'\u2014'} ${m.intM?`/ ${m.intM} mois`:''}</dd>
+      <dt>Dernier entretien</dt><dd>${fdate(c.lastDate)}</dd>
+      <dt>Prochaine \u00e9ch\u00e9ance</dt><dd>${c.echeance?fdate(c.echeance)+(c.source?` (${c.source})`:''):'\u2014'}</dd>
+    </dl>
+  </div></div>
+
+  <div class="quick noprint">
+    <button data-new="utilisation" data-m="${m.id}"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>${m.compteurActif?'Relev\u00e9 compteur':'Heures de travail'}</button>
+    <button data-new="entretien" data-m="${m.id}"><svg viewBox="0 0 24 24"><path d="M14.5 5.5a4 4 0 0 0 5 5L21 9v6l-6 6H9l-6-6 6-6h6z"/></svg>Entretien fait</button>
+    <button data-new="reparation" data-m="${m.id}"><svg viewBox="0 0 24 24"><path d="M4 20l7-7"/><path d="M14 4a4.5 4.5 0 0 0 6 6l-9 9-3-3z"/></svg>R\u00e9paration</button>
+    <button data-edit="${m.id}"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Modifier la fiche</button>
+  </div>`;
+
+  const yNow=new Date().getFullYear();
+  h+=`<div class="kpis">
+    <div class="kpi"><div class="v num">${nh(heuresAnnee(yNow,m.id))}</div><div class="k">heures ${yNow}</div></div>
+    <div class="kpi"><div class="v num">${eur(c.coutEnt+c.coutRep)}</div><div class="k">entretien + r\u00e9par.</div></div>
+    <div class="kpi"><div class="v num">${c.heuresTotal>0?eur(Math.round((c.coutTotal)/Math.max(c.heuresTotal,1))):'\u2014'}</div><div class="k">co\u00fbt / heure</div></div>
+  </div>`;
+
+  h+=`<div class="sect"><h2>Fiche</h2><div class="panel"><dl class="dl">
+    <dt>Cat\u00e9gorie</dt><dd>${esc(m.categorie)}</dd>
+    ${m.serie?`<dt>N\u00b0 de s\u00e9rie</dt><dd>${esc(m.serie)}</dd>`:''}
+    <dt>Acquisition</dt><dd>${fdate(m.dateAcq)}</dd>
+    <dt>Prix d\u2019achat HTVA</dt><dd>${eur(m.prix)}</dd>
+    <dt>Intervalle d\u2019entretien</dt><dd>${m.intH?m.intH+' h':'\u2014'} / ${m.intM?m.intM+' mois':'\u2014'}</dd>
+    <dt>Usage indicatif</dt><dd>${m.heuresAn||0} h/an</dd>
+    ${c.rythme?`<dt>Rythme constat\u00e9</dt><dd>${nh(c.rythme)} h/an</dd>`:''}
+  </dl></div></div>`;
+
+  if(m.refs && m.refs.length){
+    h+=`<div class="sect"><h2>Consommables et r\u00e9f\u00e9rences</h2><div class="panel"><dl class="dl">
+      ${m.refs.map(r=>`<dt>${esc(r.k)}</dt><dd>${esc(r.v)}</dd>`).join('')}</dl></div></div>`;
+  }
+  if(m.remarques) h+=`<div class="sect"><h2>Remarques</h2><div class="panel"><div style="padding:13px 14px;font-size:14.5px">${esc(m.remarques).replace(/\n/g,'<br>')}</div></div></div>`;
+
+  const evs=[...c.evs].reverse();
+  h+=`<div class="sect"><h2>Historique</h2><div class="panel">`;
+  if(evs.length) h+=evs.map(evRow).join('');
+  else if(!m.dateAcq) h+=`<div class="empty"><b>Pas encore d\u2019historique</b>Encodez une premi\u00e8re utilisation.</div>`;
+  if(m.dateAcq) h+=`<div class="ev"><div class="mark m-buy"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div>
+    <div><div class="t">Acquisition</div><div class="d">${fdate(m.dateAcq)}${m.prix?' \u00b7 '+eur(m.prix):''}</div></div></div>`;
+  h+=`</div></div>
+  <button class="btn ghost noprint" data-print="1">Imprimer la fiche</button>`;
+  document.getElementById('v-fiche').innerHTML=h;
+}
+
+/* ---------- feuille modale ---------- */
+function openSheet(title, body){
+  document.getElementById('sheetTitle').textContent=title;
+  document.getElementById('sheetBody').innerHTML=body;
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('sheetBg').classList.add('on');
+}
+function closeSheet(){
+  document.getElementById('sheet').classList.remove('on');
+  document.getElementById('sheetBg').classList.remove('on');
+}
+function toast(t){
+  const el=document.getElementById('toast'); el.textContent=t; el.classList.add('on');
+  clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),2200);
+}
+
+function selMachines(sel){
+  return D.machines.filter(m=>m.statut!=='archive').map(m=>`<option value="${m.id}" ${sel===m.id?'selected':''}>${esc(m.nom)}</option>`).join('');
+}
+function chipsField(list, name, selected=[]){
+  return `<div class="chips" data-chips="${name}">${list.map(t=>`<button type="button" data-v="${esc(t)}" class="${selected.includes(t)?'on':''}">${esc(t)}</button>`).join('')}
+    <button type="button" data-add="${name}">+ ajouter</button></div>`;
+}
+function readChips(name){
+  return [...document.querySelectorAll(`[data-chips="${name}"] button.on`)].map(b=>b.dataset.v);
+}
+
+/* ----- saisie utilisation ----- */
+function formUtilisation(mid, ev){
+  const m = mach(mid) || D.machines[0];
+  const e = ev || {};
+  const c = m?computeMachine(m):null;
+  openSheet(ev?'Modifier l\u2019utilisation':'Heures de travail', `
+    <div class="f"><label>Machine</label><select id="fm">${selMachines(m?m.id:'')}</select></div>
+    <div class="f2">
+      <div class="f"><label>Date</label><input type="date" id="fd" value="${e.date||today()}"></div>
+      <div class="f" id="wrapC"><label>Compteur (h)</label><input type="number" step="0.1" inputmode="decimal" id="fc" value="${e.compteur??''}" placeholder="${c&&c.cur!=null?nh(c.cur):''}"></div>
+    </div>
+    <div class="f" id="wrapD"><label>Dur\u00e9e (heures)</label><input type="number" step="0.25" inputmode="decimal" id="fdur" value="${e.duree??''}" placeholder="ex. 2,5"></div>
+    <div class="f" id="hintFirst" style="display:none"><div class="hint" style="margin:0 2px 12px">Premier relev\u00e9 de cette machine : il fixe le point de d\u00e9part du compteur, aucune heure n\u2019est encore compt\u00e9e.</div></div>
+    <div class="f"><label>Travaux effectu\u00e9s</label>${chipsField(D.travaux,'trav',e.travaux||[])}</div>
+    <div class="f"><label>Lieu</label>${chipsField(D.lieux,'lieu',e.lieu?[e.lieu]:[])}</div>
+    <div class="f2">
+      <div class="f"><label>Carburant (L)</label><input type="number" step="0.1" inputmode="decimal" id="flit" value="${e.litres??''}"></div>
+      <div class="f"><label>Co\u00fbt (\u20ac)</label><input type="number" step="1" inputmode="decimal" id="fcout" value="${e.cout??''}"></div>
+    </div>
+    <div class="f"><label>Notes</label><textarea id="fnotes">${esc(e.notes||'')}</textarea></div>
+    <button class="btn" id="fsave">Enregistrer</button>
+    ${ev?`<button class="btn danger" id="fdel" style="margin-top:9px">Supprimer</button>`:''}
+  `);
+  const sync=()=>{ const mm=mach(document.getElementById('fm').value);
+    document.getElementById('wrapC').style.display = mm&&mm.compteurActif?'':'none';
+    document.getElementById('wrapD').querySelector('label').textContent = mm&&mm.compteurActif?'Dur\u00e9e (si pas de compteur)':'Dur\u00e9e (heures)';
+    const cc=mm?computeMachine(mm):null;
+    const fc=document.getElementById('fc'); if(fc&&cc&&cc.cur!=null) fc.placeholder=nh(cc.cur);
+    document.getElementById('hintFirst').style.display = (mm&&mm.compteurActif&&cc&&cc.cur==null)?'':'none';
+  };
+  document.getElementById('fm').onchange=sync; sync();
+
+  document.getElementById('fsave').onclick=()=>{
+    const mid2=document.getElementById('fm').value;
+    const mm=mach(mid2);
+    const cptV=document.getElementById('fc').value;
+    const durV=document.getElementById('fdur').value;
+    if(!cptV && !durV){ toast('Indiquez un compteur ou une dur\u00e9e'); return; }
+    if(cptV!==''){
+      const prevC=evOf(mid2).filter(x=>x.compteur!=null && x.id!==e.id).map(x=>+x.compteur);
+      const maxC=Math.max(mm&&mm.compteurInitial!=null?mm.compteurInitial:-1, ...(prevC.length?prevC:[-1]));
+      if(maxC>=0 && +cptV<maxC && !confirm('Le compteur saisi ('+cptV+' h) est inf\u00e9rieur au dernier relev\u00e9 ('+nh(maxC)+' h). Continuer ?')) return;
+    }
+    const lieu=readChips('lieu')[0]||'';
+    const obj={id:e.id||uid(), machineId:mid2, type:'utilisation', date:document.getElementById('fd').value,
+      compteur: cptV!==''?+cptV:null, duree: durV!==''?+durV:null, travaux:readChips('trav'), lieu,
+      litres:document.getElementById('flit').value||null, cout:document.getElementById('fcout').value||null,
+      notes:document.getElementById('fnotes').value, titre:(readChips('trav')[0]||'Utilisation')};
+    if(mm && mm.compteurActif && obj.compteur!=null && mm.compteurInitial==null){
+      const prev=evOf(mm.id).filter(x=>x.compteur!=null && x.id!==obj.id);
+      if(!prev.length) mm.compteurInitial=Math.max(0, obj.compteur-(obj.duree||0));
+    }
+    upsert(obj); closeSheet(); toast('Utilisation enregistr\u00e9e');
+  };
+  const del=document.getElementById('fdel'); if(del) del.onclick=()=>removeEvent(e.id);
+}
+
+/* ----- saisie entretien ----- */
+function formEntretien(mid, ev){
+  const m=mach(mid)||D.machines[0]; const e=ev||{};
+  const c=m?computeMachine(m):null;
+  openSheet(ev?'Modifier l\u2019entretien':'Entretien r\u00e9alis\u00e9', `
+    <div class="f"><label>Machine</label><select id="fm">${selMachines(m?m.id:'')}</select></div>
+    <div class="f2">
+      <div class="f"><label>Date</label><input type="date" id="fd" value="${e.date||today()}"></div>
+      <div class="f"><label>Compteur (h)</label><input type="number" step="0.1" inputmode="decimal" id="fc" value="${e.compteur??''}" placeholder="${c&&c.cur!=null?nh(c.cur):''}"></div>
+    </div>
+    <div class="f"><label>Op\u00e9rations</label>${chipsField(D.ops,'ops',e.ops||[])}</div>
+    <div class="f2">
+      <div class="f"><label>Co\u00fbt (\u20ac)</label><input type="number" step="1" inputmode="decimal" id="fcout" value="${e.cout??''}"></div>
+      <div class="f"><label>Par</label><select id="fpres">
+        <option ${e.prestataire==='Moi-m\u00eame'?'selected':''}>Moi-m\u00eame</option>
+        <option ${e.prestataire==='Atelier / concessionnaire'?'selected':''}>Atelier / concessionnaire</option>
+        <option ${e.prestataire==='Autre'?'selected':''}>Autre</option></select></div>
+    </div>
+    <div class="f"><label>Pi\u00e8ces et r\u00e9f\u00e9rences</label><input type="text" id="fpieces" value="${esc(e.pieces||'')}" placeholder="huile 10W40, filtre \u2026"></div>
+    <div class="f"><label>Notes</label><textarea id="fnotes">${esc(e.notes||'')}</textarea></div>
+    <button class="btn sap" id="fsave">Enregistrer l\u2019entretien</button>
+    <p class="hint" style="text-align:center;color:var(--muted);font-size:12.5px">Le compteur d\u2019usure repart de z\u00e9ro \u00e0 cette date.</p>
+    ${ev?`<button class="btn danger" id="fdel" style="margin-top:9px">Supprimer</button>`:''}
+  `);
+  document.getElementById('fm').onchange=()=>{ const mm=mach(document.getElementById('fm').value); const cc=mm?computeMachine(mm):null;
+    if(cc&&cc.cur!=null) document.getElementById('fc').placeholder=nh(cc.cur); };
+  document.getElementById('fsave').onclick=()=>{
+    const ops=readChips('ops');
+    const obj={id:e.id||uid(), machineId:document.getElementById('fm').value, type:'entretien',
+      date:document.getElementById('fd').value, compteur:document.getElementById('fc').value!==''?+document.getElementById('fc').value:null,
+      ops, cout:document.getElementById('fcout').value||null, prestataire:document.getElementById('fpres').value,
+      pieces:document.getElementById('fpieces').value, notes:document.getElementById('fnotes').value,
+      titre: ops.length?ops.join(', '):'Entretien'};
+    upsert(obj); closeSheet(); toast('Entretien enregistr\u00e9');
+  };
+  const del=document.getElementById('fdel'); if(del) del.onclick=()=>removeEvent(e.id);
+}
+
+/* ----- saisie réparation ----- */
+function formReparation(mid, ev){
+  const m=mach(mid)||D.machines[0]; const e=ev||{};
+  openSheet(ev?'Modifier la r\u00e9paration':'R\u00e9paration', `
+    <div class="f"><label>Machine</label><select id="fm">${selMachines(m?m.id:'')}</select></div>
+    <div class="f2">
+      <div class="f"><label>Date</label><input type="date" id="fd" value="${e.date||today()}"></div>
+      <div class="f"><label>Compteur (h)</label><input type="number" step="0.1" inputmode="decimal" id="fc" value="${e.compteur??''}"></div>
+    </div>
+    <div class="f"><label>Panne constat\u00e9e</label><input type="text" id="ftitre" value="${esc(e.titre||'')}" placeholder="ex. courroie cass\u00e9e"></div>
+    <div class="f"><label>Intervention</label><textarea id="fnotes">${esc(e.notes||'')}</textarea></div>
+    <div class="f2">
+      <div class="f"><label>Co\u00fbt (\u20ac)</label><input type="number" step="1" inputmode="decimal" id="fcout" value="${e.cout??''}"></div>
+      <div class="f"><label>\u00c9tat</label><select id="fetat">
+        <option value="fait" ${e.etat==='fait'?'selected':''}>R\u00e9par\u00e9</option>
+        <option value="encours" ${e.etat==='encours'?'selected':''}>En cours</option>
+        <option value="afaire" ${e.etat==='afaire'?'selected':''}>\u00c0 faire</option></select></div>
+    </div>
+    <div class="f"><label>Par</label><input type="text" id="fpres" value="${esc(e.prestataire||'')}" placeholder="moi-m\u00eame, atelier \u2026"></div>
+    <button class="btn" id="fsave">Enregistrer</button>
+    ${ev?`<button class="btn danger" id="fdel" style="margin-top:9px">Supprimer</button>`:''}
+  `);
+  document.getElementById('fsave').onclick=()=>{
+    const etat=document.getElementById('fetat').value;
+    const obj={id:e.id||uid(), machineId:document.getElementById('fm').value, type:'reparation',
+      date:document.getElementById('fd').value, compteur:document.getElementById('fc').value!==''?+document.getElementById('fc').value:null,
+      titre:document.getElementById('ftitre').value||'R\u00e9paration', notes:document.getElementById('fnotes').value,
+      cout:document.getElementById('fcout').value||null, etat, prestataire:document.getElementById('fpres').value};
+    const mm=mach(obj.machineId);
+    if(mm){ if(etat!=='fait' && mm.statut==='service') mm.statut='reparation';
+            if(etat==='fait' && mm.statut==='reparation') mm.statut='service'; }
+    upsert(obj); closeSheet(); toast('R\u00e9paration enregistr\u00e9e');
+  };
+  const del=document.getElementById('fdel'); if(del) del.onclick=()=>removeEvent(e.id);
+}
+
+/* ----- fiche machine (création / édition) ----- */
+function formMachine(id){
+  const m = id?mach(id):{nom:'',categorie:'Autre',marque:'',modele:'',serie:'',dateAcq:'',prix:'',intH:100,intM:24,
+    heuresAn:10,heuresReportees:0,dernierEntretienDate:'',compteurActif:false,compteurInitial:null,statut:'service',remarques:'',refs:[]};
+  openSheet(id?'Modifier la machine':'Nouvelle machine', `
+    <div class="f"><label>Nom</label><input type="text" id="mnom" value="${esc(m.nom)}" placeholder="ex. Tracteur Solis 50"></div>
+    <div class="f"><label>Cat\u00e9gorie</label><select id="mcat">${CATS.map(c=>`<option ${m.categorie===c[0]?'selected':''}>${c[0]}</option>`).join('')}</select></div>
+    <div class="f2">
+      <div class="f"><label>Marque</label><input type="text" id="mmarque" value="${esc(m.marque)}"></div>
+      <div class="f"><label>Mod\u00e8le</label><input type="text" id="mmodele" value="${esc(m.modele)}"></div>
+    </div>
+    <div class="f"><label>N\u00b0 de s\u00e9rie</label><input type="text" id="mserie" value="${esc(m.serie)}"></div>
+    <div class="f2">
+      <div class="f"><label>Date d\u2019acquisition</label><input type="date" id="mdate" value="${m.dateAcq||''}"></div>
+      <div class="f"><label>Prix HTVA (\u20ac)</label><input type="number" id="mprix" inputmode="decimal" value="${m.prix??''}"></div>
+    </div>
+    <div class="f2">
+      <div class="f"><label>Entretien tous les (h)</label><input type="number" id="minth" inputmode="numeric" value="${m.intH??''}"></div>
+      <div class="f"><label>\u2026 ou tous les (mois)</label><input type="number" id="mintm" inputmode="numeric" value="${m.intM??''}"></div>
+    </div>
+    <div class="f"><label>Usage indicatif (h/an)</label><input type="number" id="mhan" inputmode="decimal" value="${m.heuresAn??''}"></div>
+    <div class="f"><label class="switch" style="font-weight:540"><span>Compteur horaire \u00e0 bord</span><input type="checkbox" id="mcompt" ${m.compteurActif?'checked':''}></label></div>
+    <div class="f2">
+      <div class="f"><label>Dernier entretien</label><input type="date" id="ment" value="${m.dernierEntretienDate||''}"></div>
+      <div class="f"><label>Heures depuis</label><input type="number" step="0.1" id="mrep" inputmode="decimal" value="${m.heuresReportees??0}"></div>
+    </div>
+    <div class="f"><label>Compteur actuel (h)</label><input type="number" step="0.1" id="mcini" inputmode="decimal" value="${m.compteurInitial??''}" placeholder="laisser vide si inconnu"></div>
+    <div class="f"><label>\u00c9tat</label><select id="mstat">
+      <option value="service" ${m.statut==='service'?'selected':''}>En service</option>
+      <option value="reparation" ${m.statut==='reparation'?'selected':''}>En r\u00e9paration</option>
+      <option value="hs" ${m.statut==='hs'?'selected':''}>Hors service</option>
+      <option value="archive" ${m.statut==='archive'?'selected':''}>Archiv\u00e9e</option></select></div>
+    <div class="f"><label>Consommables et r\u00e9f\u00e9rences</label><textarea id="mrefs" placeholder="Huile moteur : 10W40, 2,3 L&#10;Filtre \u00e0 huile : REF 1234">${esc((m.refs||[]).map(r=>r.k+' : '+r.v).join('\n'))}</textarea>
+      <div class="hint">Une ligne par r\u00e9f\u00e9rence, s\u00e9par\u00e9e par deux points.</div></div>
+    <div class="f"><label>Remarques</label><textarea id="mrem">${esc(m.remarques||'')}</textarea></div>
+    <button class="btn" id="msave">${id?'Enregistrer':'Cr\u00e9er la machine'}</button>
+    ${id?`<button class="btn danger" id="mdel" style="margin-top:9px">Supprimer la machine</button>`:''}
+  `);
+  document.getElementById('msave').onclick=()=>{
+    const v=x=>document.getElementById(x).value;
+    const nom=v('mnom').trim(); if(!nom){ toast('Donnez un nom \u00e0 la machine'); return; }
+    const refs=v('mrefs').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+      const i=l.indexOf(':'); return i>0?{k:l.slice(0,i).trim(),v:l.slice(i+1).trim()}:{k:l,v:''};});
+    const obj={ id:id||uid(), nom, categorie:v('mcat'), marque:v('mmarque'), modele:v('mmodele'), serie:v('mserie'),
+      dateAcq:v('mdate')||null, prix:v('mprix')!==''?+v('mprix'):null, intH:v('minth')!==''?+v('minth'):null,
+      intM:v('mintm')!==''?+v('mintm'):null, heuresAn:v('mhan')!==''?+v('mhan'):0,
+      compteurActif:document.getElementById('mcompt').checked, compteurInitial:v('mcini')!==''?+v('mcini'):null,
+      dernierEntretienDate:v('ment')||null, dernierEntretienCompteur:id?mach(id).dernierEntretienCompteur:null,
+      heuresReportees:v('mrep')!==''?+v('mrep'):0, statut:v('mstat'), remarques:v('mrem'), refs,
+      photo:id?mach(id).photo:null };
+    if(id){ Object.assign(mach(id), obj); } else D.machines.push(obj);
+    save(); closeSheet(); toast(id?'Fiche mise \u00e0 jour':'Machine ajout\u00e9e');
+    if(id) render(); else go('parc');
+  };
+  const del=document.getElementById('mdel');
+  if(del) del.onclick=()=>{
+    if(!confirm('Supprimer cette machine et tout son historique ?')) return;
+    D.events=D.events.filter(e=>e.machineId!==id);
+    D.machines=D.machines.filter(x=>x.id!==id);
+    save(); closeSheet(); go('parc');
+  };
+}
+
+function upsert(obj){
+  const i=D.events.findIndex(e=>e.id===obj.id);
+  if(i>=0) D.events[i]=obj; else D.events.push(obj);
+  save(); render();
+}
+function removeEvent(id){
+  if(!confirm('Supprimer cette saisie ?')) return;
+  D.events=D.events.filter(e=>e.id!==id); save(); closeSheet(); render();
+}
+
+/* ---------- photos ---------- */
+let photoTarget=null;
+document.getElementById('photoInput').addEventListener('change', function(){
+  const f=this.files[0]; if(!f||!photoTarget) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const max=1100, sc=Math.min(1, max/Math.max(img.width,img.height));
+      const cv=document.createElement('canvas');
+      cv.width=Math.round(img.width*sc); cv.height=Math.round(img.height*sc);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      const m=mach(photoTarget); if(m){ m.photo=cv.toDataURL('image/jpeg',0.7); save(); render(); toast('Photo enregistr\u00e9e'); }
+      photoTarget=null;
+    };
+    img.src=r.result;
+  };
+  r.readAsDataURL(f);
+  this.value='';
+});
+
+/* ---------- réglages ---------- */
+function openSettings(){
+  const cn=!!store.get('dbx_refresh')||!!store.get('dbx_token');
+  openSheet('R\u00e9glages', `
+    <div class="sect"><h2>Sauvegarde Dropbox</h2><div class="panel">
+      <div class="row" style="display:block;padding:13px 14px">
+        <div style="font-size:14px;color:var(--muted)">${cn?'Connect\u00e9 \u00b7 fichier '+DBX_FILE:'Non connect\u00e9. Les donn\u00e9es restent sur ce t\u00e9l\u00e9phone.'}</div>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:4px">Derni\u00e8re synchro : ${store.get('dbx_last')?fdate(store.get('dbx_last'))+' '+store.get('dbx_last').slice(11,16):'jamais'}</div>
+      </div>
+    </div>
+    ${cn?`<button class="btn sap" id="sSync" style="margin-top:10px">Synchroniser maintenant</button>
+          <button class="btn ghost" id="sPull" style="margin-top:9px">R\u00e9cup\u00e9rer la version Dropbox</button>
+          <button class="btn ghost" id="sOut" style="margin-top:9px">D\u00e9connecter</button>`
+        :`<button class="btn" id="sIn" style="margin-top:10px">Connecter Dropbox</button>`}
+    </div>
+
+    <div class="sect"><h2>Donn\u00e9es</h2>
+      <button class="btn ghost" id="sJson">Exporter la sauvegarde (JSON)</button>
+      <button class="btn ghost" id="sCsv" style="margin-top:9px">Exporter le journal (CSV)</button>
+      <button class="btn ghost" id="sCsvM" style="margin-top:9px">Exporter le parc (CSV)</button>
+      <button class="btn ghost" id="sImp" style="margin-top:9px">Importer une sauvegarde</button>
+      <input type="file" id="impFile" accept="application/json" style="display:none">
+    </div>
+
+    <div class="sect"><h2>Listes</h2>
+      <button class="btn ghost" id="sTrav">Types de travaux (${D.travaux.length})</button>
+      <button class="btn ghost" id="sLieux" style="margin-top:9px">Lieux (${D.lieux.length})</button>
+      <button class="btn ghost" id="sOps" style="margin-top:9px">Op\u00e9rations d\u2019entretien (${D.ops.length})</button>
+    </div>
+
+    <div class="sect"><h2>\u00c0 propos</h2><div class="panel"><dl class="dl">
+      <dt>Machines</dt><dd>${D.machines.length}</dd>
+      <dt>Saisies</dt><dd>${D.events.length}</dd>
+      <dt>Derni\u00e8re modification</dt><dd>${fdate(D.updatedAt)}</dd>
+    </dl></div></div>
+  `);
+  const on=(id,fn)=>{const el=document.getElementById(id); if(el) el.onclick=fn;};
+  on('sIn',dbxLogin); on('sOut',dbxLogout);
+  on('sSync',()=>syncNow(true)); on('sPull',()=>dbxPull(true));
+  on('sJson',exportJSON); on('sCsv',exportCSV); on('sCsvM',exportCSVMachines);
+  on('sImp',()=>document.getElementById('impFile').click());
+  on('sTrav',()=>listEditor('travaux','Types de travaux'));
+  on('sLieux',()=>listEditor('lieux','Lieux'));
+  on('sOps',()=>listEditor('ops','Op\u00e9rations d\u2019entretien'));
+  const imp=document.getElementById('impFile');
+  if(imp) imp.onchange=function(){ const f=this.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=()=>{ try{ const o=JSON.parse(r.result);
+      if(!o.machines) throw 0; D=o; save(); closeSheet(); go('home'); toast('Sauvegarde import\u00e9e'); }
+      catch(e){ toast('Fichier illisible'); } }; r.readAsText(f); };
+}
+
+function listEditor(key,title){
+  openSheet(title, `
+    <div class="f"><label>Un \u00e9l\u00e9ment par ligne</label><textarea id="le" style="min-height:220px">${esc(D[key].join('\n'))}</textarea></div>
+    <button class="btn" id="lsave">Enregistrer</button>
+    <button class="btn ghost" id="lback" style="margin-top:9px">Retour aux r\u00e9glages</button>`);
+  document.getElementById('lsave').onclick=()=>{
+    D[key]=document.getElementById('le').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    save(); openSettings(); toast('Liste mise \u00e0 jour');
+  };
+  document.getElementById('lback').onclick=openSettings;
+}
+
+/* ---------- exports ---------- */
+function dl(name, content, type){
+  const b=new Blob([content],{type}); const u=URL.createObjectURL(b);
+  const a=document.createElement('a'); a.href=u; a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
+function exportJSON(){ dl(`atelier-${today()}.json`, JSON.stringify(D,null,1), 'application/json'); }
+function csvEsc(v){ v=(v??'').toString().replace(/"/g,'""'); return `"${v}"`; }
+function exportCSV(){
+  const rows=[['Date','Machine','Type','Compteur (h)','Dur\u00e9e (h)','Travaux','Lieu','Op\u00e9rations','Co\u00fbt','Carburant (L)','Notes']];
+  const durMap=new Map(); D.machines.forEach(m=>durations(m).forEach((v,k)=>durMap.set(k,v)));
+  [...D.events].sort((a,b)=>a.date<b.date?-1:1).forEach(e=>{
+    const m=mach(e.machineId);
+    rows.push([e.date, m?m.nom:'', e.type, e.compteur??'', durMap.get(e.id)??e.duree??'',
+      (e.travaux||[]).join(' | '), e.lieu||'', (e.ops||[]).join(' | '), e.cout??'', e.litres??'',
+      (e.titre?e.titre+' — ':'')+(e.notes||'')]);
+  });
+  dl(`journal-${today()}.csv`, '\uFEFF'+rows.map(r=>r.map(csvEsc).join(';')).join('\n'), 'text/csv');
+}
+function exportCSVMachines(){
+  const rows=[['Machine','Cat\u00e9gorie','Acquisition','Prix HTVA','Interv. h','Interv. mois','Dernier entretien',
+    'Heures depuis','Mois depuis','Compteur','Statut','\u00c9ch\u00e9ance','Co\u00fbt entretien','Co\u00fbt r\u00e9parations']];
+  D.machines.forEach(m=>{ const c=computeMachine(m);
+    rows.push([m.nom,m.categorie,m.dateAcq||'',m.prix??'',m.intH??'',m.intM??'',c.lastDate||'',
+      nh(c.heuresDepuis), c.moisDepuis!=null?nh(c.moisDepuis):'', c.cur??'',
+      {ok:'\u00c0 jour',soon:'Bient\u00f4t',late:'En retard',idle:'Inactif'}[c.statut], c.echeance||'', c.coutEnt, c.coutRep]);});
+  dl(`parc-${today()}.csv`, '\uFEFF'+rows.map(r=>r.map(csvEsc).join(';')).join('\n'), 'text/csv');
+}
+
+/* ---------- Dropbox (OAuth PKCE + refresh) ---------- */
+function b64url(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+async function sha256(s){ return b64url(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))); }
+function redirectUri(){ return location.origin+location.pathname; }
+
+async function dbxLogin(){
+  const v = b64url(crypto.getRandomValues(new Uint8Array(48)));
+  sessionStorage.setItem('dbx_v', v);
+  const ch = await sha256(v);
+  const u = new URL('https://www.dropbox.com/oauth2/authorize');
+  u.searchParams.set('client_id', DBX_KEY);
+  u.searchParams.set('response_type','code');
+  u.searchParams.set('code_challenge', ch);
+  u.searchParams.set('code_challenge_method','S256');
+  u.searchParams.set('token_access_type','offline');
+  u.searchParams.set('redirect_uri', redirectUri());
+  location.href = u.toString();
+}
+function dbxLogout(){
+  ['dbx_token','dbx_refresh','dbx_exp','dbx_last'].forEach(k=>{ try{localStorage.removeItem(k)}catch(e){} delete memStore[k]; });
+  closeSheet(); toast('Dropbox d\u00e9connect\u00e9'); updateSyncDot();
+}
+async function dbxExchange(code){
+  const v=sessionStorage.getItem('dbx_v');
+  const body=new URLSearchParams({code,grant_type:'authorization_code',client_id:DBX_KEY,code_verifier:v,redirect_uri:redirectUri()});
+  const r=await fetch('https://api.dropboxapi.com/oauth2/token',{method:'POST',body});
+  if(!r.ok) throw new Error('auth');
+  const j=await r.json();
+  store.set('dbx_token', j.access_token);
+  if(j.refresh_token) store.set('dbx_refresh', j.refresh_token);
+  store.set('dbx_exp', String(Date.now()+(j.expires_in||14000)*1000));
+}
+async function dbxToken(){
+  const t=store.get('dbx_token'), exp=+(store.get('dbx_exp')||0);
+  if(t && Date.now()<exp-60000) return t;
+  const rt=store.get('dbx_refresh');
+  if(!rt) return t||null;
+  const body=new URLSearchParams({grant_type:'refresh_token',refresh_token:rt,client_id:DBX_KEY});
+  const r=await fetch('https://api.dropboxapi.com/oauth2/token',{method:'POST',body});
+  if(!r.ok) return null;
+  const j=await r.json();
+  store.set('dbx_token', j.access_token);
+  store.set('dbx_exp', String(Date.now()+(j.expires_in||14000)*1000));
+  return j.access_token;
+}
+async function dbxPull(loud){
+  const t=await dbxToken(); if(!t){ if(loud) toast('Dropbox non connect\u00e9'); return null; }
+  const r=await fetch('https://content.dropboxapi.com/2/files/download',{method:'POST',
+    headers:{'Authorization':'Bearer '+t,'Dropbox-API-Arg':JSON.stringify({path:DBX_FILE})}});
+  if(r.status===409){ if(loud) toast('Aucun fichier sur Dropbox'); return null; }
+  if(!r.ok){ if(loud) toast('Lecture Dropbox impossible'); return null; }
+  const j=await r.json();
+  if(loud){ D=j; save(false); store.set('dbx_last',new Date().toISOString()); closeSheet(); go('home'); toast('Donn\u00e9es Dropbox r\u00e9cup\u00e9r\u00e9es'); }
+  return j;
+}
+async function dbxPush(){
+  const t=await dbxToken(); if(!t) return false;
+  const r=await fetch('https://content.dropboxapi.com/2/files/upload',{method:'POST',
+    headers:{'Authorization':'Bearer '+t,'Content-Type':'application/octet-stream',
+      'Dropbox-API-Arg':JSON.stringify({path:DBX_FILE,mode:'overwrite',mute:true})},
+    body:JSON.stringify(D)});
+  if(r.ok) store.set('dbx_last', new Date().toISOString());
+  return r.ok;
+}
+let syncTimer=null, dirty=false;
+function queueSync(){
+  dirty=true; updateSyncDot();
+  if(!store.get('dbx_refresh')&&!store.get('dbx_token')) return;
+  clearTimeout(syncTimer); syncTimer=setTimeout(()=>syncNow(false), 4000);
+}
+async function syncNow(loud){
+  if(!store.get('dbx_refresh')&&!store.get('dbx_token')){ if(loud) toast('Connectez Dropbox d\u2019abord'); return; }
+  if(!navigator.onLine){ if(loud) toast('Hors ligne \u2014 sauvegarde locale conserv\u00e9e'); return; }
+  const remote=await dbxPull(false);
+  if(remote && remote.updatedAt > D.updatedAt && !dirty){
+    D=remote; save(false); render(); if(loud) toast('Version Dropbox r\u00e9cup\u00e9r\u00e9e');
+  } else {
+    const ok=await dbxPush();
+    if(ok){ dirty=false; if(loud) toast('Sauvegard\u00e9 sur Dropbox'); }
+    else if(loud) toast('\u00c9chec de la synchro');
+  }
+  updateSyncDot(); if(loud) closeSheet();
+}
+function updateSyncDot(){
+  const has=!!(store.get('dbx_refresh')||store.get('dbx_token'));
+  document.getElementById('syncDot').style.display = (has&&dirty)?'block':'none';
+}
+
+/* ---------- événements globaux ---------- */
+document.addEventListener('click', ev=>{
+  const t=ev.target.closest('[data-fiche],[data-go],[data-new],[data-parc],[data-jf],[data-year],[data-ev],[data-edit],[data-photo],[data-print],[data-chips] button');
+  if(!t) return;
+  if(t.dataset.fiche) return go('fiche', t.dataset.fiche);
+  if(t.dataset.go) return go(t.dataset.go);
+  if(t.dataset.parc){ parcFilter=t.dataset.parc; return renderParc(); }
+  if(t.dataset.jf){ jFilter=t.dataset.jf; return renderJournal(); }
+  if(t.dataset.year){ statYear=+t.dataset.year; return renderStats(); }
+  if(t.dataset.edit) return formMachine(t.dataset.edit);
+  if(t.dataset.print) return window.print();
+  if(t.dataset.photo){ photoTarget=t.dataset.photo; document.getElementById('photoInput').click(); return; }
+  if(t.dataset.ev){ const e=D.events.find(x=>x.id===t.dataset.ev); if(!e) return;
+    if(e.type==='utilisation') formUtilisation(e.machineId,e);
+    else if(e.type==='entretien') formEntretien(e.machineId,e);
+    else formReparation(e.machineId,e); return; }
+  if(t.dataset.new){
+    const mid=t.dataset.m||null;
+    if(t.dataset.new==='machine') return formMachine(null);
+    if(!D.machines.length){ toast('Ajoutez d\u2019abord une machine'); return; }
+    if(t.dataset.new==='utilisation') return formUtilisation(mid);
+    if(t.dataset.new==='entretien') return formEntretien(mid);
+    if(t.dataset.new==='reparation') return formReparation(mid);
+  }
+  if(t.dataset.add){ // ajout d'un élément de liste
+    const key={trav:'travaux',lieu:'lieux',ops:'ops'}[t.dataset.add];
+    const v=prompt('Nouvel \u00e9l\u00e9ment');
+    if(v&&v.trim()){ D[key].push(v.trim()); save();
+      const wrap=t.parentElement;
+      const b=document.createElement('button'); b.type='button'; b.dataset.v=v.trim(); b.textContent=v.trim(); b.className='on';
+      wrap.insertBefore(b,t); }
+    return; }
+  if(t.parentElement && t.parentElement.dataset.chips!==undefined && t.dataset.v!==undefined){
+    const single = t.parentElement.dataset.chips==='lieu';
+    if(single) t.parentElement.querySelectorAll('button').forEach(b=>{ if(b!==t) b.classList.remove('on'); });
+    t.classList.toggle('on');
+  }
+});
+document.getElementById('fab').onclick=()=>{
+  const dm = view==='fiche'&&ficheId ? ` data-m="${ficheId}"` : '';
+  openSheet('Encoder', `
+    <button class="btn ghost" data-new="utilisation"${dm} style="text-align:left;padding:16px">Heures de travail</button>
+    <button class="btn ghost" data-new="entretien"${dm} style="text-align:left;padding:16px;margin-top:9px">Entretien r\u00e9alis\u00e9</button>
+    <button class="btn ghost" data-new="reparation"${dm} style="text-align:left;padding:16px;margin-top:9px">R\u00e9paration</button>
+    <button class="btn ghost" data-new="machine" style="text-align:left;padding:16px;margin-top:9px">Nouvelle machine</button>`);
+};
+document.getElementById('btnBack').onclick=()=>go('parc');
+document.getElementById('btnSettings').onclick=openSettings;
+document.getElementById('btnSync').onclick=()=>syncNow(true);
+document.getElementById('sheetClose').onclick=closeSheet;
+document.getElementById('sheetBg').onclick=closeSheet;
+
+/* ---------- démarrage ---------- */
+(async function init(){
+  load();
+  const p=new URLSearchParams(location.search);
+  if(p.get('code')){
+    try{ await dbxExchange(p.get('code')); history.replaceState({},'',redirectUri());
+      const remote=await dbxPull(false);
+      if(remote && remote.machines){ D=remote; save(false); toast('Dropbox connect\u00e9'); }
+      else { await dbxPush(); toast('Dropbox connect\u00e9'); }
+    }catch(e){ history.replaceState({},'',redirectUri()); toast('Connexion Dropbox \u00e9chou\u00e9e'); }
+  } else if(store.get('dbx_refresh')||store.get('dbx_token')){
+    const remote=await dbxPull(false);
+    if(remote && remote.updatedAt && remote.updatedAt>D.updatedAt){ D=remote; save(false); }
+  }
+  updateSyncDot();
+  go('home');
+})();
+
+</script>
+</body>
+</html>
