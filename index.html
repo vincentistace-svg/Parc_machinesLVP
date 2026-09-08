@@ -880,7 +880,7 @@ function renderFiche(){
 
   h+=`<div class="sect"><h2>Fiche</h2><div class="panel"><dl class="dl">
     <dt>Cat\u00e9gorie</dt><dd>${esc(m.categorie)}</dd>
-    ${m.serie?`<dt>N\u00b0 de s\u00e9rie</dt><dd>${esc(m.serie)}</dd>`:''}
+    <dt>N\u00b0 de s\u00e9rie</dt><dd>${m.serie?esc(m.serie):'<span style="color:var(--muted);font-weight:400">non renseign\u00e9</span>'}</dd>
     <dt>Acquisition</dt><dd>${fdate(m.dateAcq)}</dd>
     <dt>Prix d\u2019achat HTVA</dt><dd>${eur(m.prix)}</dd>
     <dt>Intervalle d\u2019entretien</dt><dd>${m.intH?m.intH+' h':'\u2014'} / ${m.intM?m.intM+' mois':'\u2014'}</dd>
@@ -1074,7 +1074,8 @@ function formMachine(id){
       <div class="f"><label>Marque</label><input type="text" id="mmarque" value="${esc(m.marque)}"></div>
       <div class="f"><label>Mod\u00e8le</label><input type="text" id="mmodele" value="${esc(m.modele)}"></div>
     </div>
-    <div class="f"><label>N\u00b0 de s\u00e9rie</label><input type="text" id="mserie" value="${esc(m.serie)}"></div>
+    <div class="f"><label>N\u00b0 de s\u00e9rie</label><input type="text" id="mserie" value="${esc(m.serie)}" placeholder="relev\u00e9 sur la plaque de la machine">
+      <div class="hint">Utile pour les pi\u00e8ces d\u00e9tach\u00e9es, la garantie et l\u2019assurance.</div></div>
     <div class="f2">
       <div class="f"><label>Date d\u2019acquisition</label><input type="date" id="mdate" value="${m.dateAcq||''}"></div>
       <div class="f"><label>Prix HTVA (\u20ac)</label><input type="number" id="mprix" inputmode="decimal" value="${m.prix??''}"></div>
@@ -1240,10 +1241,10 @@ function exportCSV(){
   dl(`journal-${today()}.csv`, '\uFEFF'+rows.map(r=>r.map(csvEsc).join(';')).join('\n'), 'text/csv');
 }
 function exportCSVMachines(){
-  const rows=[['Machine','Cat\u00e9gorie','Acquisition','Prix HTVA','Interv. h','Interv. mois','Dernier entretien',
+  const rows=[['Machine','Cat\u00e9gorie','N\u00b0 de s\u00e9rie','Acquisition','Prix HTVA','Interv. h','Interv. mois','Dernier entretien',
     'Heures depuis','Mois depuis','Compteur','Statut','\u00c9ch\u00e9ance','Co\u00fbt entretien','Co\u00fbt r\u00e9parations']];
   D.machines.forEach(m=>{ const c=computeMachine(m);
-    rows.push([m.nom,m.categorie,m.dateAcq||'',m.prix??'',m.intH??'',m.intM??'',c.lastDate||'',
+    rows.push([m.nom,m.categorie,m.serie||'',m.dateAcq||'',m.prix??'',m.intH??'',m.intM??'',c.lastDate||'',
       nh(c.heuresDepuis), c.moisDepuis!=null?nh(c.moisDepuis):'', c.cur??'',
       {ok:'\u00c0 jour',soon:'Bient\u00f4t',late:'En retard',idle:'Inactif'}[c.statut], c.echeance||'', c.coutEnt, c.coutRep]);});
   dl(`parc-${today()}.csv`, '\uFEFF'+rows.map(r=>r.map(csvEsc).join(';')).join('\n'), 'text/csv');
